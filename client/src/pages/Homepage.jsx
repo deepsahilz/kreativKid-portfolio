@@ -5,6 +5,7 @@ import Services from '../components/Services'
 import {gsap} from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from 'react'
+import CallHook from '../components/CallHook'
 
 // Register the plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -34,6 +35,7 @@ const Homepage = () => {
         {/* <div className='h-screen w-full'></div> */}
         <FeaturedWork/>
         <Services/>
+        <CallHook/>
     </>
   )
 }

@@ -24,3 +24,7 @@
   --font-founders: 'founders', sans-serif;
   --font-rejouice: 'rejouice', sans-serif;
 }
+
+.clip-custom-shape {
+  clip-path: polygon(60% 8%, 66% 0, 100% 0, 100% 100%, 0 100%, 0 8%);
+}

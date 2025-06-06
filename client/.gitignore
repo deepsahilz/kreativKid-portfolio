@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 src/assets/images/shabals/
+src/assets/images/artworks/
 
 # Editor directories and files
 .vscode/*
