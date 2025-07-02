@@ -25,7 +25,7 @@ const FeaturedWork = () => {
       <div className='w-full h-full flex justify-center'>
         {/* <video className=' h-full rounded-md' autoPlay muted loop src='../src/assets/videos/ORBIT-5-01-LITE.mp4'/> */}
         {/* <video className=' h-full rounded-md' autoPlay muted loop src='../src/assets/videos/Showcase.mp4'/> */}
-        <video className=' h-full w-full object-cover ' autoPlay muted loop src='../src/assets/videos/11904044_640_360_25fps.mp4'/>
+        <video className=' h-full w-full object-cover ' autoPlay muted loop src='../assets/videos/11904044_640_360_25fps.mp4'/>
       </div>
 
       <div className='absolute top-0 pointer-events-none w-full h-full bg-black/20 '></div>
