@@ -10,10 +10,19 @@ const About = () => {
 
             </div>
 
-            <p className='pb-20 text-4xl text-justify leading-15 font-nb'>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eveniet nam libero pariatur laboriosam animi rem, neque perspiciatis architecto dignissimos aspernatur temporibus dolorum, maxime, porro quo omnis. Accusamus magnam nostrum voluptates!<br/>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non quibusdam sint nobis, nisi vero laborum, dolorum corrupti ducimus laboriosam id dolores et itaque cumque rerum odio provident inventore, error commodi.
-                </p>
+            
+          <div className='pb-20 text-4xl text-justify leading-15 font-nb flex flex-col gap-5 text-zinc-200'>
+            <p>Hey, my name is Sahildeep Singh, currently 21, from Punjab, India. I recently completed my graduation, and most of what I know, I’ve learned through hands-on practice, reading docs, and asking the internet.</p>
+            
+            <p>I believe in learning by doing. I’ve spent the past couple of years working on personal projects, hackathon builds, and random ideas that made me better at what I love—building stuff that’s useful, creative, or just plain cool.</p> 
+          <div className='hidden  gap-3 mt-10'>
+            {["Passionate","Artist","Coder"].map((item,idx)=>(
+              <div key={idx} className='py-1 px-4  rounded-full border border-zinc-700 text-lg'>{item}</div>
+            ))}
+          </div>
+            <p>I’m also into graphic design and digital art, with freelance experience in tools like Photoshop and Figma.  Whether it's code or visuals, I like making things that serve a purpose and bring ideas to life. Always learning, always building.</p>
+            
+          </div>
         </div>
     </div>
   )

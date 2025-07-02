@@ -50,22 +50,26 @@ const CallHook = () => {
     
 
   return (
-    <div className='bg-orange-50 h-screen relative'>
+    <div className='bg-zinc-50 h-screen '>
+        <div className='w-full h-full relative'>
         <div 
         onMouseEnter={()=>{stretchBox();shakeDots()}} onMouseLeave={()=>{hideBox();resetDots()}} onMouseMove={trackDots}
-        className='text-[12rem]  grouper  w-full py-20 z-10 absolute top-[50%] left-[50%] -translate-[50%] font-founders leading-none uppercase'
+        className=' text-[7rem] md:text-[12rem] text-center md:not-[]:text-center  grouper  w-full py-20 z-10 absolute top-[50%] left-[50%] -translate-[50%] font-founders leading-none uppercase'
         >
             <div className='flex pointer-events-none flex-col items-center'>
-                <div className='text-nowrap'>Let's create</div>
-                <div className='flex items-end gap-5 -mt-10'>
+                <div className='md:text-nowrap leading-22 md:leading-none'>Let's create</div>
+                <div className='flex flex-col sm:flex-row items-end gap-5 -mt-2 md:-mt-10'>
                     epicness
-                    <div className='box  h-30 bg-blue-500 rounded-lg mb-6'></div>    
+                    <div className='box h-30 flex justify-center overflow-hidden bg-blue-500 rounded-lg mb-6'>
+                        <img className='min-w-50 h-auto object-cover' src='../src/assets/images/artworks/img (13).webp'/>    
+                    </div>    
                 </div>
                 <p className='text-lg font-nb capitalize'>lorem ipsum you knowi know together</p>
             </div>
         </div>
+        
 
-        <div className='relative  w-full h-[60%] top-[50%] -translate-y-[50%]  left-0'>
+        <div className='hidden lg:flex relative w-full h-[60%] top-[50%] -translate-y-[50%]  left-0'>
                 
                 <div className='dotBar absolute flex px-10 justify-between  w-full top-[50%]'>
                     <div className='flex gap-5 items-center'>
@@ -78,6 +82,7 @@ const CallHook = () => {
                     </div>
                 </div>
 
+        </div>
         </div>
     </div>
   )

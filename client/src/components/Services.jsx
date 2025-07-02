@@ -94,7 +94,7 @@ const Services = () => {
   return (
 <div className='bg-zinc-950 font-nb   text-zinc-100 px-10 py-20 '>
         
-        <h1 className='font-semibold text-8xl'>Services</h1>
+        <h1 className='font-semibold text-8xl'>What else i do</h1>
         <p className='mb-40 text-2xl'>Just the stuff i do obsessively well !</p>
         
         <div className='grid grid-cols-4 h-60 w-full gap-2'>

@@ -5,6 +5,7 @@ import Work from './pages/Work'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Lenis from '@studio-freight/lenis'
+import WorkModal from './pages/WorkModal'
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/about" element={<About/>} />
           <Route path="/work" element={<Work/>} />
         </Route>
+          <Route path="/work/:id" element={<WorkModal/>} />
       </Routes>
   )
 }
