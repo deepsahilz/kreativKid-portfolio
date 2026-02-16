@@ -14,9 +14,9 @@ const WorkModal = () => {
         <div className='w-full h-full flex justify-center p-5 overflow-hidden items-center'>
                 <div className='h-full inline-flex relative bg-amber-300 '>
 
-                <img className='h-full' src={`../src/assets/images/work/img (${id}).webp`}/>
+                <img className='h-full' src={`/images/work/img (${id}).webp`}/>
                 <div className='h-full absolute ' style={{clipPath:`inset(0 0 0 ${imageWidth}% )`}}>
-                    <img className=' h-full object-cover' src={`../src/assets/images/work/img (${id})b.jpg`}/>
+                    <img className=' h-full object-cover' src={`/images/work/img (${id})b.jpg`}/>
                 </div>
                 <input className='absolute w-full h-full opacity-0' type='range' max="100" value={imageWidth} onChange={(e)=>setImageWidth(e.target.value)}  />
                 <div style={{left:`${imageWidth}%`}} className={`slider-line transition-transform duration-300 bg-white absolute -translate-x-1 w-1 h-full`}>

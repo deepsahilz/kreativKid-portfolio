@@ -61,7 +61,7 @@ const CallHook = () => {
                 <div className='flex flex-col sm:flex-row items-end gap-5 -mt-2 md:-mt-10'>
                     epicness
                     <div className='box h-30 flex justify-center overflow-hidden bg-blue-500 rounded-lg mb-6'>
-                        <img className='min-w-50 h-auto object-cover' src='../src/assets/images/artworks/img (13).webp'/>    
+                        <img className='min-w-50 h-auto object-cover' src='/images/artworks/img (13).webp'/>    
                     </div>    
                 </div>
                 <p className='text-lg font-nb capitalize'>lorem ipsum you knowi know together</p>

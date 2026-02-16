@@ -76,13 +76,13 @@ return(
 
     <div className=' w-full h-full relative flex justify-center items-center'>
         <div className='absolute page1 bg-zinc-600 z-[10] overflow-hidden bottom-0  right-0  w-full h-60'>
-            <img src="../src/assets/images/artworks/img (6).webp" className="w-full h-full object-cover" />
+            <img src="/images/artworks/img (6).webp" className="w-full h-full object-cover" />
         </div>
         <div className='absolute page2 bg-zinc-500 z-[9] overflow-hidden  bottom-0  w-[98%] h-60'>
-            <img src="../src/assets/images/artworks/img (4).webp" className="w-full h-full object-cover" />
+            <img src="/images/artworks/img (4).webp" className="w-full h-full object-cover" />
         </div>
         <div className='absolute page3 bg-zinc-400 z-[8] overflow-hidden  bottom-0  w-[96%] h-60'>
-            <img src="../src/assets/images/artworks/img (13).webp" className="w-full h-full object-cover" />
+            <img src="/images/artworks/img (13).webp" className="w-full h-full object-cover" />
         </div>
     </div>
 

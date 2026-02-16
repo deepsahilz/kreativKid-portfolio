@@ -9,9 +9,9 @@ const HeroSection = () => {
   const createTrail=(e)=>{
     const createImg =()=>{
       const img = document.createElement("img");
-      const collection = Array.from({length:27},(_,i)=>`../src/assets/images/artworks/img (${i+1}).webp`)
+      const collection = Array.from({length:27},(_,i)=>`/images/artworks/img (${i+1}).webp`)
       const randomIndex = Math.floor(Math.random()*collection.length);
-      // img.src = "../src/assets/images/shabals/1.jpg";
+      // img.src = "/images/shabals/1.jpg";
       img.src = collection[randomIndex];
       img.className = "pointer-events-none w-70 absolute";
       img.style.left = `${e.clientX}px`

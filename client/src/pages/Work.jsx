@@ -48,7 +48,7 @@ const Work = () => {
                 // <div className=' group w-full h-50 md:h-[26rem] relative overflow-hidden' onClick={()=>{navigate(`/work/${i+1}`)}}>
                 <div className=' group w-full mb-2 relative overflow-hidden' onClick={()=>{navigate(`/work/${i+1}`)}}>
                   <div className='absolute w-full h-full opacity-0 z-[10] transition-opacity bg-purple-500 group-hover:opacity-50'></div>
-                  <img className=' group-hover:scale-110 h-full w-full object-cover transition-transform' src = {`../src/assets/images/work/img (${i+1}).webp`}/>
+                  <img className=' group-hover:scale-110 h-full w-full object-cover transition-transform' src = {`/images/work/img (${i+1}).webp`}/>
                 </div>
               ))}             
             </div>
@@ -66,7 +66,7 @@ const Work = () => {
         {/* the modal overlay */}
         {/* {isModalOpen&& <div onClick={()=>setIsModalOpen(false)} className='fixed z-[50] cursor-zoom-out top-0 left-0  bg-black/70 w-[100vw] h-[100vh]'>          
           <div className='bg-black z-[55] flex  justify-center cursor-default p-5 absolute top-[50%] left-[50%] -translate-[50%] w-[75vw] h-[95vh]'>
-          <img className=' h-full' src={`../src/assets/images/work/img (${selectedImage}).webp`}/>
+          <img className=' h-full' src={`/images/work/img (${selectedImage}).webp`}/>
           </div>
           </div>} */}
           

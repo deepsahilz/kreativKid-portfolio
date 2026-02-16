@@ -10,7 +10,7 @@ const HeroSection = () => {
   const containerRef = useRef(null);
   const createTrail=(e)=>{
     const img = document.createElement("img");
-    img.src = "../src/assets/images/1.jpg";
+    img.src = "/images/1.jpg";
     img.className = "pointer-events-none w-40 absolute";
     img.style.left = `${e.clientX}px`
     img.style.top = `${e.clientY}px`
