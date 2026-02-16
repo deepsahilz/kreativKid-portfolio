@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import { MdArrowOutward } from "react-icons/md";
 import { gsap } from "gsap"
 
@@ -7,9 +7,8 @@ const Services2 = () => {
   const containerRef = useRef(null);
   const previewRef = useRef(null);
   const intervalRef = useRef(null);
-  const imgRef = useRef(null);
 
-  // store last mouse position
+  // ✅ store last mouse position
   const mouseRef = useRef({
     x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
     y: typeof window !== "undefined" ? window.innerHeight / 2 : 0
@@ -54,6 +53,7 @@ const Services2 = () => {
       i++;
     }, 1500);
 
+    // ✅ Position immediately near last mouse
     const { x, y } = mouseRef.current;
 
     gsap.set(previewRef.current, {
@@ -63,6 +63,7 @@ const Services2 = () => {
 
     gsap.to(previewRef.current, {
       rotate: 4,
+      xPercent: 0,
       scale: 1,
       transformOrigin: "0 25%",
       duration: 0.3,
@@ -99,23 +100,6 @@ const Services2 = () => {
   };
 
 
-  // Image transition animation
-  useEffect(() => {
-    if (!imgRef.current) return;
-
-    gsap.fromTo(
-      imgRef.current,
-      { opacity: 0, scale: 0.96 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.4,
-        ease: "power2.out"
-      }
-    );
-  }, [currentImg]);
-
-
   return (
     <div className='bg-zinc-50 relative text-zinc-950 py-20 w-full'>
 
@@ -125,11 +109,10 @@ const Services2 = () => {
       >
         <div
           ref={previewRef}
-          className='top-0 left-0 absolute w-80 overflow-hidden h-90 bg-zinc-700 scale-0 rounded-lg pointer-events-none'
+          className='top-0 left-0 previewBox absolute w-80 overflow-hidden h-90 bg-zinc-700 scale-0 rounded-lg pointer-events-none'
         >
           <img
-            ref={imgRef}
-            className='w-full h-full object-cover'
+            className='previewImg w-full h-full object-cover transition-opacity opacity-100'
             src={`/images/artworks/${currentImg}.webp`}
           />
         </div>
