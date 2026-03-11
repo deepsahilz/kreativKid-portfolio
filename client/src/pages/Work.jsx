@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const FILTERS = ["All", "Concept arts", "Logo designs", "UI/UX", "Poster designs"];
@@ -9,118 +9,73 @@ const Work = () => {
   const [imageCount, setImageCount] = useState(20);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [visible, setVisible] = useState(false);
-  const loaderRef = useRef(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 80);
     return () => clearTimeout(t);
   }, []);
 
-  const handleLoadMore = () => setImageCount(c => c + 10);
-
   return (
-    <div
-      style={{
-        background: '#0a0a0a',
-        color: '#f0ede8',
-        minHeight: '100vh',
-        fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="bg-[#0a0a0a] text-[#f0ede8] min-h-screen relative overflow-hidden" style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif" }}>
+
       {/* Grain overlay */}
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none',
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
-        opacity: 0.5,
-      }} />
+      <div
+        className="fixed inset-0 z-[1] pointer-events-none opacity-50"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
+        }}
+      />
 
       {/* Accent glow */}
-      <div style={{
-        position: 'fixed', top: '-20vh', right: '-10vw', width: '60vw', height: '60vw',
-        borderRadius: '50%', background: 'radial-gradient(circle, rgba(130,90,255,0.07) 0%, transparent 70%)',
-        pointerEvents: 'none', zIndex: 0,
-      }} />
+      <div
+        className="fixed -top-[20vh] -right-[10vw] w-[60vw] h-[60vw] rounded-full pointer-events-none z-0"
+        style={{ background: 'radial-gradient(circle, rgba(130,90,255,0.07) 0%, transparent 70%)' }}
+      />
 
-      <div style={{ position: 'relative', zIndex: 2, padding: '0 2.5rem 8rem' }}>
+      <div className="relative z-[2] px-3 pb-24 md:px-10 md:pb-32">
 
         {/* Header */}
-        <div style={{
-          paddingTop: '7rem',
-          paddingBottom: '2rem',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1.5rem',
-        }}>
+        <div className="flex flex-col items-center gap-6 pt-28 pb-8">
+
           {/* Eyebrow */}
-          <div style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'opacity 0.6s ease, transform 0.6s ease',
-            display: 'flex', alignItems: 'center', gap: '0.75rem',
-          }}>
-            <span style={{ display: 'block', width: 32, height: 1, background: 'rgba(240,237,232,0.3)' }} />
-            <span style={{
-              fontSize: '0.7rem', letterSpacing: '0.25em', textTransform: 'uppercase',
-              color: 'rgba(240,237,232,0.45)', fontWeight: 500,
-            }}>Selected Work</span>
-            <span style={{ display: 'block', width: 32, height: 1, background: 'rgba(240,237,232,0.3)' }} />
+          <div className={`flex items-center gap-3 transition-all duration-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+            <span className="block w-8 h-px bg-[#f0ede8]/30" />
+            <span className="text-[0.7rem] tracking-[0.25em] uppercase text-[#f0ede8]/45 font-medium">Selected Work</span>
+            <span className="block w-8 h-px bg-[#f0ede8]/30" />
           </div>
 
-          <h1 style={{
-            fontSize: 'clamp(5rem, 18vw, 17rem)',
-            fontWeight: 700,
-            letterSpacing: '-0.03em',
-            lineHeight: 0.88,
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            fontFamily: "'DM Sans', sans-serif",
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s',
-            // Split color trick
-            background: 'linear-gradient(180deg, #f0ede8 60%, rgba(240,237,232,0.25) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>Work</h1>
+          {/* Title */}
+          <h1
+            className={`text-[clamp(5rem,18vw,17rem)] font-bold uppercase text-center leading-[0.88] tracking-[-0.03em] transition-all duration-700 delay-100 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+            style={{
+              background: 'linear-gradient(180deg, #f0ede8 60%, rgba(240,237,232,0.2) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Work
+          </h1>
         </div>
 
         {/* Filter pills */}
-        <div style={{
-          display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-          gap: '0.5rem', marginBottom: '3.5rem',
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(8px)',
-          transition: 'opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s',
-        }}>
+        <div className={`flex flex-wrap justify-center gap-2 mb-12 transition-all duration-700 delay-200 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
           {FILTERS.map((f, idx) => (
             <button
               key={idx}
               onClick={() => setActiveFilter(f)}
-              style={{
-                padding: '0.45rem 1.1rem',
-                borderRadius: 999,
-                border: `1px solid ${activeFilter === f ? 'rgba(240,237,232,0.9)' : 'rgba(240,237,232,0.18)'}`,
-                background: activeFilter === f ? 'rgba(240,237,232,0.08)' : 'transparent',
-                color: activeFilter === f ? '#f0ede8' : 'rgba(240,237,232,0.45)',
-                fontSize: '0.78rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                fontFamily: 'inherit',
-              }}
-            >{f}</button>
+              className={`px-4 py-1.5 rounded-full text-[0.75rem] uppercase tracking-[0.08em] cursor-pointer transition-all duration-200 border
+                ${activeFilter === f
+                  ? 'border-[#f0ede8]/80 bg-[#f0ede8]/8 text-[#f0ede8]'
+                  : 'border-[#f0ede8]/18 bg-transparent text-[#f0ede8]/45 hover:text-[#f0ede8]/70 hover:border-[#f0ede8]/35'
+                }`}
+            >
+              {f}
+            </button>
           ))}
         </div>
 
         {/* Masonry Grid */}
-        <div style={{
-          columns: 4,
-          gap: '0.75rem',
-        }}>
+        <div className="columns-2 md:columns-4 gap-1.5 md:gap-3">
           {Array.from({ length: imageCount }, (_, i) => {
             const idx = i + 1;
             const isHovered = hoveredIdx === idx;
@@ -130,13 +85,8 @@ const Work = () => {
                 onClick={() => navigate(`/work/${idx}`)}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                className="relative mb-1.5 md:mb-3 overflow-hidden rounded-[3px] cursor-pointer break-inside-avoid"
                 style={{
-                  position: 'relative',
-                  marginBottom: '0.75rem',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  breakInside: 'avoid',
-                  borderRadius: 4,
                   opacity: visible ? 1 : 0,
                   transform: visible ? 'translateY(0)' : 'translateY(16px)',
                   transition: `opacity 0.5s ease ${Math.min(i * 0.04, 0.6)}s, transform 0.5s ease ${Math.min(i * 0.04, 0.6)}s`,
@@ -146,59 +96,39 @@ const Work = () => {
                 <img
                   src={`/images/work/img (${idx}).webp`}
                   alt={`Artwork ${idx}`}
+                  className="block w-full h-auto object-cover"
                   style={{
-                    display: 'block',
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'cover',
                     transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                     transform: isHovered ? 'scale(1.06)' : 'scale(1)',
                   }}
                 />
 
                 {/* Hover overlay */}
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(160deg, rgba(90,50,200,0.55) 0%, rgba(0,0,0,0.3) 100%)',
-                  opacity: isHovered ? 1 : 0,
-                  transition: 'opacity 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  padding: '1rem',
-                }}>
-                  <div style={{
-                    transform: isHovered ? 'translateY(0)' : 'translateY(6px)',
-                    transition: 'transform 0.3s ease',
-                    display: 'flex', justifyContent: 'space-between',
-                    alignItems: 'flex-end', width: '100%',
-                  }}>
-                    <span style={{
-                      fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.75)',
-                    }}>View</span>
-                    <span style={{
-                      width: 28, height: 28, borderRadius: '50%',
-                      border: '1px solid rgba(255,255,255,0.5)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.9rem', color: 'white',
-                    }}>↗</span>
+                <div
+                  className="absolute inset-0 flex items-end p-3 md:p-4"
+                  style={{
+                    background: 'linear-gradient(160deg, rgba(90,50,200,0.55) 0%, rgba(0,0,0,0.3) 100%)',
+                    opacity: isHovered ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                >
+                  <div
+                    className="flex justify-between items-end w-full"
+                    style={{
+                      transform: isHovered ? 'translateY(0)' : 'translateY(6px)',
+                      transition: 'transform 0.3s ease',
+                    }}
+                  >
+                    <span className="text-[0.65rem] tracking-[0.12em] uppercase text-white/75">View</span>
+                    <span className="w-7 h-7 rounded-full border border-white/50 flex items-center justify-center text-sm text-white">↗</span>
                   </div>
                 </div>
 
                 {/* Index badge */}
-                <div style={{
-                  position: 'absolute', top: '0.6rem', left: '0.6rem',
-                  background: 'rgba(10,10,10,0.6)',
-                  backdropFilter: 'blur(6px)',
-                  borderRadius: 999,
-                  padding: '0.18rem 0.55rem',
-                  fontSize: '0.6rem',
-                  color: 'rgba(240,237,232,0.5)',
-                  letterSpacing: '0.1em',
-                  fontFamily: 'monospace',
-                  opacity: isHovered ? 1 : 0,
-                  transition: 'opacity 0.25s ease',
-                }}>
+                <div
+                  className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm rounded-full px-2 py-0.5 text-[0.6rem] text-[#f0ede8]/50 font-mono tracking-[0.1em] transition-opacity duration-200"
+                  style={{ opacity: isHovered ? 1 : 0 }}
+                >
                   {String(idx).padStart(2, '0')}
                 </div>
               </div>
@@ -207,49 +137,18 @@ const Work = () => {
         </div>
 
         {/* Load more */}
-        <div style={{
-          display: 'flex', justifyContent: 'center',
-          marginTop: '4rem',
-        }}>
+        <div className="flex flex-col items-center gap-4 mt-16">
           <button
-            onClick={handleLoadMore}
-            style={{
-              position: 'relative',
-              background: 'transparent',
-              border: '1px solid rgba(240,237,232,0.25)',
-              color: '#f0ede8',
-              padding: '0.85rem 2.5rem',
-              borderRadius: 999,
-              fontSize: '0.78rem',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              overflow: 'hidden',
-              transition: 'border-color 0.25s, color 0.25s',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(240,237,232,0.7)';
-              e.currentTarget.style.background = 'rgba(240,237,232,0.05)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(240,237,232,0.25)';
-              e.currentTarget.style.background = 'transparent';
-            }}
+            onClick={() => setImageCount(c => c + 10)}
+            className="border border-[#f0ede8]/25 hover:border-[#f0ede8]/60 hover:bg-[#f0ede8]/5 text-[#f0ede8] rounded-full px-10 py-3 text-[0.78rem] uppercase tracking-[0.15em] cursor-pointer transition-all duration-200"
           >
             Load more artworks
           </button>
+          <span className="text-[0.7rem] tracking-[0.12em] uppercase text-[#f0ede8]/25">
+            Showing {imageCount} works
+          </span>
         </div>
 
-        {/* Work count */}
-        <p style={{
-          textAlign: 'center', marginTop: '1.25rem',
-          fontSize: '0.7rem', letterSpacing: '0.12em',
-          color: 'rgba(240,237,232,0.25)',
-          textTransform: 'uppercase',
-        }}>
-          Showing {imageCount} works
-        </p>
       </div>
     </div>
   );
