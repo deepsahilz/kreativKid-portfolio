@@ -33,7 +33,7 @@ const Homepage = () => {
 
     <>
         <HeroSection/>
-        <FeaturedWork/>
+        {/* <FeaturedWork/> */}
         <Hook2Section/>
         {/* <HookSection/> */}
         {/* <div className='h-screen w-full'></div> */}
