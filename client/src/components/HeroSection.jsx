@@ -3,149 +3,154 @@ import { gsap } from "gsap"
 
 const HeroSection = () => {
   const containerRef = useRef(null);
-  const idleAnimRef = useRef(null);
-  const mouseIdleTimer = useRef(null);
-  const idlePositionRef = useRef({ t: 0 });
-  const lastSpawnTime = useRef(0);
-  const lastMousePos = useRef(null);
+  const spawnIndexRef = useRef(0);
+  const activeCountRef = useRef(0);
+  const schedulerRef = useRef(null);
+  const usedRecentlyRef = useRef([]);
 
-  const isTouchDevice = () =>
-    typeof window !== 'undefined' &&
-    ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  const MAX_ACTIVE = 6;
+  const SIZES = [130, 175, 155, 160, 145, 150];
+  const RECENT_MEMORY = 8;
 
-  const createImg = useCallback((x, y) => {
+  const images = Array.from({ length: 27 }, (_, i) => `/images/artworks2/img${i + 1}.webp`);
+
+  const ZONES = [
+    { xMin: 0.05, xMax: 0.35, yMin: 0.08, yMax: 0.55 },
+    { xMin: 0.65, xMax: 0.95, yMin: 0.08, yMax: 0.55 },
+    { xMin: 0.20, xMax: 0.50, yMin: 0.12, yMax: 0.60 },
+    { xMin: 0.50, xMax: 0.80, yMin: 0.12, yMax: 0.60 },
+    { xMin: 0.10, xMax: 0.45, yMin: 0.30, yMax: 0.65 },
+    { xMin: 0.55, xMax: 0.90, yMin: 0.30, yMax: 0.65 },
+    { xMin: 0.30, xMax: 0.70, yMin: 0.08, yMax: 0.35 },
+  ];
+
+  const SPAWN_MIN = 380;
+  const SPAWN_JITTER = 320;
+  const INITIAL_BURST = 3;
+
+  const TILT_RANGE = 18;
+  const DRIFT_X_RANGE = 30;
+  const DRIFT_Y_MIN = 20;
+  const DRIFT_Y_EXTRA = 30;
+
+  const ENTER_SCALE = 0.72;
+  const ENTER_DURATION = 0.75;
+
+  const HOLD_MIN = 1.4;
+  const HOLD_JITTER = 0.8;
+
+  const EXIT_DURATION = 0.9;
+  const EXIT_SCALE = 0.88;
+
+  const getRandomImage = useCallback(() => {
+    const used = usedRecentlyRef.current;
+    const available = images.filter(img => !used.includes(img));
+    const pool = available.length > 0 ? available : images;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    usedRecentlyRef.current.push(pick);
+    if (usedRecentlyRef.current.length > RECENT_MEMORY) usedRecentlyRef.current.shift();
+    return pick;
+  }, [images]);
+
+  const spawnImage = useCallback(() => {
     if (!containerRef.current) return;
+    if (activeCountRef.current >= MAX_ACTIVE) return;
+    activeCountRef.current++;
 
-    const img = document.createElement("img");
-    const collection = Array.from({ length: 27 }, (_, i) => `/images/artworks/img (${i + 1}).webp`);
-    const randomIndex = Math.floor(Math.random() * collection.length);
-    img.src = collection[randomIndex];
-    img.className = "pointer-events-none absolute";
-    img.style.width = window.innerWidth < 768 ? '45vw' : '280px';
-    img.style.left = `${x}px`;
-    img.style.top = `${y}px`;
-    img.style.transform = 'translate(-50%, -50%)';
-    containerRef.current.appendChild(img);
+    const W = containerRef.current.offsetWidth;
+    const H = containerRef.current.offsetHeight;
 
-    gsap.set(img, { autoAlpha: 1, yPercent: 100, rotate: 0 });
+    const zoneIndex = spawnIndexRef.current % ZONES.length;
+    spawnIndexRef.current++;
+    const zone = ZONES[zoneIndex];
 
-    gsap.timeline()
-      .to(img, { duration: 1.5, yPercent: 0, rotate: 10, ease: "expo.out" })
-      .to(img, {
-        duration: 1,
-        autoAlpha: 0,
-        rotate: 0,
-        yPercent: 100,
-        ease: 'expo.inOut',
-        onComplete: () => img.remove(),
-      });
-  }, []);
+    const x = W * (zone.xMin + Math.random() * (zone.xMax - zone.xMin));
+    const y = H * (zone.yMin + Math.random() * (zone.yMax - zone.yMin));
 
-  const clearIdleImages = useCallback(() => {
-    if (!containerRef.current) return;
-    const imgs = containerRef.current.querySelectorAll('img');
-    imgs.forEach(img => {
-      gsap.killTweensOf(img);
-      gsap.to(img, { duration: 0.3, autoAlpha: 0, onComplete: () => img.remove() });
+    const size = SIZES[Math.floor(Math.random() * SIZES.length)];
+    const tilt = (Math.random() - 0.5) * TILT_RANGE;
+    const driftX = (Math.random() - 0.5) * DRIFT_X_RANGE;
+    const driftY = -(DRIFT_Y_MIN + Math.random() * DRIFT_Y_EXTRA);
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = [
+      'position:absolute',
+      `width:${size}px`,
+      `height:${size * 1.28}px`,
+      `left:${x}px`,
+      `top:${y}px`,
+      'transform:translate(-50%,-50%)',
+      'overflow:hidden',
+      'border-radius:4px',
+      'will-change:transform,opacity',
+    ].join(';');
+
+    const img = document.createElement('img');
+    img.src = getRandomImage();
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:4px;';
+    img.onerror = () => {};
+
+    wrap.appendChild(img);
+    containerRef.current.appendChild(wrap);
+
+    gsap.set(wrap, {
+      autoAlpha: 0,
+      scale: ENTER_SCALE,
+      rotate: tilt - 6,
+      x: 0,
+      y: 12,
     });
-  }, []);
 
-  const stopIdleTrail = useCallback(() => {
-    if (idleAnimRef.current) {
-      cancelAnimationFrame(idleAnimRef.current);
-      idleAnimRef.current = null;
-    }
-  }, []);
-
-  const startIdleTrail = useCallback(() => {
-    if (idleAnimRef.current) return;
-    if (!containerRef.current) return;
-
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const isMobile = vw < 768;
-
-    const centerX = isMobile ? vw * 0.5 : vw / 2.8;
-    const centerY = isMobile ? vh * 0.35 : vh / 5;
-    const amplitude = isMobile ? vw * 0.15 : vw * 0.20;
-
-    idlePositionRef.current.t = 0;
-    let lastSpawn = 0;
-    const spawnInterval = isMobile ? 900 : 720;
-
-    const tick = (timestamp) => {
-      if (!idleAnimRef.current) return;
-
-      idlePositionRef.current.t += 0.014;
-      const t = idlePositionRef.current.t;
-
-      const x = centerX + Math.sin(t) * amplitude;
-      const y = centerY + Math.sin(t * 0.4) * (vh * 0.08);
-
-      if (timestamp - lastSpawn > spawnInterval) {
-        createImg(x, y);
-        lastSpawn = timestamp;
+    gsap.timeline({
+      onComplete: () => {
+        wrap.remove();
+        activeCountRef.current--;
       }
+    })
+      .to(wrap, {
+        duration: ENTER_DURATION,
+        autoAlpha: 1,
+        scale: 1,
+        rotate: tilt,
+        y: 0,
+        ease: 'expo.out',
+      })
+      .to(wrap, {
+        duration: HOLD_MIN + Math.random() * HOLD_JITTER,
+        x: driftX * 0.5,
+        y: driftY * 0.4,
+        rotate: tilt + (Math.random() - 0.5) * 4,
+        ease: 'sine.inOut',
+      })
+      .to(wrap, {
+        duration: EXIT_DURATION,
+        autoAlpha: 0,
+        scale: EXIT_SCALE,
+        x: driftX,
+        y: driftY,
+        rotate: tilt + (Math.random() - 0.5) * 8,
+        ease: 'expo.inOut',
+      });
+  }, [getRandomImage]);
 
-      idleAnimRef.current = requestAnimationFrame(tick);
-    };
-
-    idleAnimRef.current = requestAnimationFrame(tick);
-  }, [createImg]);
-
-  const createTrail = useCallback((e) => {
-    if (isTouchDevice()) return;
-
-    // Stop idle trail and clear its images the moment mouse moves
-    if (idleAnimRef.current) {
-      stopIdleTrail();
-      clearIdleImages();
-    }
-
-    const now = performance.now();
-    const curr = { x: e.clientX, y: e.clientY };
-    const prev = lastMousePos.current;
-
-    if (prev) {
-      const dx = curr.x - prev.x;
-      const dy = curr.y - prev.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      // spawn one image every ~120px of travel
-      const step = 120;
-
-      if (dist > step) {
-        const steps = Math.floor(dist / step);
-        for (let i = 1; i <= steps; i++) {
-          const t = i / (steps + 1);
-          const ix = prev.x + dx * t;
-          const iy = prev.y + dy * t;
-          // small stagger so they don't all pile up at once
-          setTimeout(() => createImg(ix, iy), i * 30);
-        }
-      }
-    }
-
-    // always spawn at current cursor position if throttle allows
-    if (now - lastSpawnTime.current > 300) {
-      lastSpawnTime.current = now;
-      createImg(curr.x, curr.y);
-    }
-
-    lastMousePos.current = curr;
-
-    clearTimeout(mouseIdleTimer.current);
-    mouseIdleTimer.current = setTimeout(() => {
-      startIdleTrail();
-    }, 3000);
-  }, [createImg, stopIdleTrail, startIdleTrail, clearIdleImages]);
+  const scheduleNext = useCallback(() => {
+    const delay = SPAWN_MIN + Math.random() * SPAWN_JITTER;
+    schedulerRef.current = setTimeout(() => {
+      spawnImage();
+      scheduleNext();
+    }, delay);
+  }, [spawnImage]);
 
   useEffect(() => {
-    startIdleTrail();
+    for (let i = 0; i < INITIAL_BURST; i++) spawnImage();
+
+    const kickoff = setTimeout(scheduleNext, 200);
+
     return () => {
-      stopIdleTrail();
-      clearTimeout(mouseIdleTimer.current);
+      clearTimeout(kickoff);
+      clearTimeout(schedulerRef.current);
     };
-  }, [startIdleTrail, stopIdleTrail]);
+  }, [spawnImage, scheduleNext]);
 
   return (
     <div className='relative w-full overflow-hidden bg-zinc-950 h-[100svh] font-nb text-white px-6 md:px-10'>
@@ -165,24 +170,41 @@ const HeroSection = () => {
         <rect width="100%" height="100%" filter="url(#grain)"/>
       </svg>
 
-      {/* Image trail container — mouse on desktop, automated on mobile */}
+      {/* Image trail container */}
       <div
         ref={containerRef}
         className="image-trail absolute top-0 left-0 w-full h-full"
-        onMouseMove={!isTouchDevice() ? createTrail : undefined}
       />
 
       {/* Bottom text bar */}
-      <div className='absolute flex justify-between items-end z-20 pointer-events-none bottom-7 left-6 md:left-10 md:right-10 right-6'>
-        <h1 className='font-founders md:text-[12rem] text-[23vw] leading-none'>KREATIVKID*</h1>
-        <div className='text-white items-center hidden md:flex gap-2 text-sm tracking-widest'>
-          <span>ART</span>
-          <span className='mb-0.5'>&bull;</span>
-          <span>DESIGN</span>
-          <span className='mb-0.5'>&bull;</span>
-          <span>UI UX</span>
+      <div className='absolute z-20 pointer-events-none bottom-8 left-6 right-6 md:left-10 md:right-10'>
+
+        <div className='flex flex-col gap-4 md:flex-row md:justify-between md:items-end'>
+          
+          <h1 className='font-founders text-[22vw] md:text-[11rem] leading-none -my-3'>
+            KREATIVKID*
+          </h1>
+
+          <p className='text-zinc-300 max-w-[320px] md:max-w-none text-sm md:text-base'>
+            I design things that solve problems,<br/>
+            build brands, help people,<br/>
+            and leave something worth sharing.
+          </p>
+
+          <div className='hidden md:flex flex-col items-end gap-5'>
+            <div className='text-white items-center bg-black border p-2 rounded-xl px-4 flex gap-2 text-sm tracking-widest'>
+              <span>ART</span>
+              <span className='mb-0.5'>&bull;</span>
+              <span>GRAPHIC DESIGN</span>
+              <span className='mb-0.5'>&bull;</span>
+              <span>UI-UX</span>
+            </div>
+          </div>
+
         </div>
+
       </div>
+
     </div>
   );
 };

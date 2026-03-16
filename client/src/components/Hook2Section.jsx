@@ -1,16 +1,60 @@
-import React from 'react'
+import React, { useEffect, useRef } from "react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import SplitType from "split-type"
 
 const Hook2Section = () => {
+
+  const textRef = useRef(null)
+
+  useEffect(() => {
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const split = new SplitType(textRef.current, { types: "lines" })
+    const lines = split.lines
+
+    lines.forEach((line) => {
+
+      line.style.backgroundImage =
+        "linear-gradient(to right,#ffffff 0%,#ffffff 45%,#3b82f6 48%,#3b82f6 52%,#525252 55%,#525252 100%)"
+
+      line.style.backgroundSize = "220% 100%"   // wider sweep
+      line.style.backgroundPosition = "100% 0%" // start outside view
+      line.style.webkitBackgroundClip = "text"
+      line.style.backgroundClip = "text"
+      line.style.color = "transparent"
+
+    })
+
+    gsap.to(lines, {
+      backgroundPosition: "0% 0%",
+      ease: "none",
+      stagger: 0.5,
+      scrollTrigger: {
+        trigger: textRef.current,
+        start: "top 80%",
+        end: "bottom 30%",
+        scrub: true
+      }
+    })
+
+  }, [])
+
   return (
-    <div className='h-screen bg-black text-zinc-100 px-6 md:px-10 pb-20 pt-35 w-full overflow-hidden'>
-        {/* <h1 className=' text-4xl md:text-[5rem] font-nb  leading-none '>Most of these started as ‘what if I just…Most of these started as ‘what if I just…Most of these ?</h1> */}
-        {/* <h1 className=' text-4xl md:text-[5rem] font-nb text-justify leading-none '>Sometimes all it takes is a random thought, a late night spark, and the willingness to follow an idea until it becomes something worth <span className='italic px-2'> sharing.</span></h1> */}
-        <h1 className=' text-4xl md:text-[4.2rem] font-nb text-justify md:leading-20 '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I don't always know what I'm creating when i start - I just follow the feeling, trust the process and let the art reveal itself onepixel at a time.</h1>
-        <div className='w-full mt-10 hidden text-2xl flex justify-between text-justify'>
-          <p className='max-w-[30rem]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quo deleniti labore non nemo deserunt, cupiditate beatae omnis nam saepe facilis vit. Tempora, ex?</p>
-          <p className='max-w-[20rem]'>Lorem ipsum dolor sulpa quo deleniti labore non nemo des.</p>
-          <p className='max-w-[30rem]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quo deleniti labore non nemo deserunt, cupiditate beatae omnis nam saepe facilis vitae sunt, rem repudiandae necessitatibus blanditiis optio. Tempora, ex?</p>
-        </div>
+    <div className="min-h-screen bg-black px-6 md:px-12 py-32 flex items-center">
+
+      <h1
+        ref={textRef}
+        className="text-4xl text-justify md:text-left md:text-[3.5rem] font-nb leading-tight mx-auto text-zinc-600"
+      >
+        I don't always know 
+        {/* <img src="/images/extras/cat-flower.png" className="inline-block w-28 mx-2 align-middle"/> */}
+        what I'm creating when I start — I just follow the
+        feeling, trust the process and let the art reveal itself one pixel at a
+        time.
+      </h1>
+
     </div>
   )
 }

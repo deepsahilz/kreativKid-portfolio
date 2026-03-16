@@ -75,7 +75,7 @@ const Work = () => {
         </div>
 
         {/* Masonry Grid */}
-        <div className="columns-2 md:columns-4 gap-1.5 md:gap-3">
+        <div className="columns-2 md:columns-6 gap-1.5 md:gap-2">
           {Array.from({ length: imageCount }, (_, i) => {
             const idx = i + 1;
             const isHovered = hoveredIdx === idx;
