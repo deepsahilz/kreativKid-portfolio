@@ -45,15 +45,21 @@ const Hook2Section = () => {
     <div className="min-h-screen bg-black px-6 md:px-12 py-32 flex items-center">
 
       <h1
-        ref={textRef}
-        className="text-4xl text-justify md:text-left md:text-[3.5rem] font-nb leading-tight mx-auto text-zinc-600"
-      >
-        I don't always know 
-        {/* <img src="/images/extras/cat-flower.png" className="inline-block w-28 mx-2 align-middle"/> */}
-        what I'm creating when I start — I just follow the
-        feeling, trust the process and let the art reveal itself one pixel at a
-        time.
-      </h1>
+  ref={textRef}
+  className="text-4xl text-justify md:text-left md:text-[3.2rem] font-nb leading-tight mx-auto text-zinc-600"
+>
+  I don’t always know 
+  <img src="/images/extras/cat-flower.png" className="inline-block w-20 -m-5 mx-2 align-middle"/>
+  what I’m creating 
+  <img src="/images/extras/take.png" className="inline-block w-25 mx-2 -m-5 align-middle"/>
+  when I start — it begins with a small idea.  
+  I follow the 
+  <img src="/images/extras/greeky.png" className="inline-block w-20 mx-4 -mt-5 align-middle"/>
+  feeling, trust the process, and let things take shape naturally,  
+  <img src="/images/extras/spidey.png" className="inline-block w-18 -mt-2 mx-4 align-middle"/>
+  revealing themselves one pixel at a 
+  time.
+</h1>
 
     </div>
   )
