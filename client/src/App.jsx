@@ -2,39 +2,52 @@ import React, { useEffect } from 'react'
 import Homepage from './pages/Homepage'
 import About from './pages/About'
 import Work from './pages/Work'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Layout from './components/Layout'
 import Lenis from '@studio-freight/lenis'
-import WorkModal from './pages/WorkModal'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const App = () => {
+  const location = useLocation()
 
-   useEffect(() => {
+  // ── Lenis smooth scroll ──────────────────────────────────────────────
+  useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
       smooth: true,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
+    })
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+    // Connect Lenis to GSAP ticker so they stay in sync
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      lenis.destroy()               // ← stop lenis on unmount
+      gsap.ticker.remove(lenis.raf) // ← detach from gsap ticker
     }
+  }, [])
 
-    requestAnimationFrame(raf);
-  }, []);
+  // ── Refresh ScrollTrigger on every route change ──────────────────────
+  useEffect(() => {
+    // Scroll to top first, then let ScrollTrigger recalculate
+    window.scrollTo(0, 0)
+    ScrollTrigger.refresh()
+  }, [location.pathname])
 
   return (
-    
-    <Routes location={location} key={location.pathname}>
-          {/* <Route path="/*" element={<CatGame />} /> */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/about" element={<About/>} />
-          <Route path="/work" element={<Work/>} />
-        </Route>
-          <Route path="/work/:id" element={<WorkModal/>} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Homepage />} />
+        <Route path="about" element={<About />} />
+        <Route path="work" element={<Work />} />
+      </Route>
+    </Routes>
   )
 }
 

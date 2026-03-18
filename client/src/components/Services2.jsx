@@ -117,102 +117,99 @@ const Services2 = () => {
   const cardRefs   = useRef([])
 
   useEffect(() => {
-    const cards = cardRefs.current
-    const isMobile = window.innerWidth < 768
+  const cards = cardRefs.current
+  const isMobile = window.innerWidth < 768
 
-    const ctx = gsap.context(() => {
+  const ctx = gsap.context(() => {
 
-      // ── Initial card positions ──────────────────────────────────────────
-      cards.forEach((card, i) => {
-        const fromPos = isMobile ? services[i].mobileFrom : services[i].from
-        gsap.set(card, { ...fromPos, transformOrigin: "center center" })
-      })
+    cards.forEach((card, i) => {
+      const fromPos = isMobile ? services[i].mobileFrom : services[i].from
+      gsap.set(card, { ...fromPos, transformOrigin: "center center" })
+    })
 
-      // ── Header reveal ───────────────────────────────────────────────────
-      const h1 = headerRef.current.querySelector("h1")
-      const h1Height = h1.offsetHeight
-      gsap.set(h1, { y: h1Height + 10 })
-      gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left center" })
+    const h1 = headerRef.current.querySelector("h1")
+    const h1Height = h1.offsetHeight
+    gsap.set(h1, { y: h1Height + 10 })
+    gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "left center" })
 
-      gsap.timeline({
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 50%",
+        toggleActions: "play none none reverse",
+      },
+    })
+      .to(h1, { y: 0, duration: 0.8, ease: "power3.out" })
+      .to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "expo.out" }, 0.15)
+
+    if (!isMobile) {
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 50%",
-          toggleActions: "play none none reverse",
+          start: "top top",
+          snap: true,
+          end: "+=180%",
+          pin: true,
+          pinSpacing: true,       // ← explicitly set
+          scrub: 0.8,
+          anticipatePin: 1,
         },
       })
-        .to(h1, { y: 0, duration: 0.8, ease: "power3.out" })
-        .to(lineRef.current, { scaleX: 1, duration: 0.8, ease: "expo.out" }, 0.15)
+      cards.forEach((card, i) => {
+        tl.to(card,
+          { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.3, ease: "back.out(1.2)" },
+          0.1 + i * 0.2
+        )
+      })
+    }
 
-      // ── Desktop: all cards fly in together, scrubbed ────────────────────
-      if (!isMobile) {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            snap: true,
-            end: "+=180%",
-            pin: true,
-            scrub: 0.8,
-            anticipatePin: 1,
-          },
-        })
-        cards.forEach((card, i) => {
-          tl.to(card,
-            { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.3, ease: "back.out(1.2)" },
-            0.1 + i * 0.2
-          )
-        })
-      }
+    if (isMobile) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: `+=${services.length * 120}%`,
+          pin: true,
+          pinSpacing: true,       // ← explicitly set
+          scrub: 0.8,
+          anticipatePin: 1,
+        },
+      })
 
-      // ── Mobile: cards stacked, deal one by one ──────────────────────────
-      if (isMobile) {
-        // Pin for enough scroll to deal all 4 cards
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: `+=${services.length * 120}%`,
-            pin: true,
-            scrub: 0.8,
-            anticipatePin: 1,
-          },
-        })
+      cards.forEach((card, i) => {
+        const slot = i / services.length
+        const dur  = 1 / services.length * 0.6
 
-        cards.forEach((card, i) => {
-          const slot = i / services.length
-          const dur  = 1 / services.length * 0.6
+        tl.to(card,
+          { x: 0, y: 0, rotation: 0, opacity: 1, duration: dur, ease: "back.out(1.2)" },
+          slot
+        )
 
-          // Fly in and land
-          tl.to(card,
-            { x: 0, y: 0, rotation: 0, opacity: 1, duration: dur, ease: "back.out(1.2)" },
-            slot
-          )
+        if (i > 0) {
+          cards.slice(0, i).forEach((prev, j) => {
+            const depth = i - j
+            tl.to(prev,
+              {
+                y: depth * 10,
+                rotation: depth % 2 === 0 ? -2 : 2,
+                scale: 1 - depth * 0.02,
+                duration: dur * 0.5,
+                ease: "power2.out",
+              },
+              slot + dur * 0.5
+            )
+          })
+        }
+      })
+    }
 
-          // When this card lands, nudge all previous cards slightly
-          // so their edges peek out — making the stack obvious
-          if (i > 0) {
-            cards.slice(0, i).forEach((prev, j) => {
-              const depth = i - j                          // how deep in the stack
-              tl.to(prev,
-                {
-                  y: depth * 10,                           // shift down 10px per layer
-                  rotation: depth % 2 === 0 ? -2 : 2,     // alternate slight tilt each layer
-                  scale: 1 - depth * 0.02,                 // very subtle shrink for depth
-                  duration: dur * 0.5,
-                  ease: "power2.out",
-                },
-                slot + dur * 0.5                           // nudge as new card finishes landing
-              )
-            })
-          }
-        })
-      }
+  }, sectionRef)
 
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  return () => {
+    ctx.revert() // ← this alone is enough, handles all cleanup
+    // ❌ REMOVE: ScrollTrigger.killAll(true)
+  }
+}, [])
 
   return (
     <section

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { BiExpandAlt } from "react-icons/bi";
 
 const Work = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [imageCount, setImageCount] = useState(20);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [visible, setVisible] = useState(false);
