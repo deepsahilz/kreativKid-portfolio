@@ -126,7 +126,7 @@ const Footer = () => {
                 style={{
                   transform: 'translateY(100%)',
                   opacity: 0,
-                  textShadow: '0 0 40px rgba(255,255,255,0.1)',
+                  // textShadow: '0 0 40px rgba(255,255,255,0.1)',
                   // background: 'linear-gradient(180deg, #ffffff 0%, #52525b 100%)',
                   // WebkitBackgroundClip: 'text',
                   // WebkitTextFillColor: 'transparent',

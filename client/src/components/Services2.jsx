@@ -77,7 +77,7 @@ const ServiceCard = ({ s }) => {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative rounded-2xl overflow-hidden bg-zinc-950 flex flex-col justify-between p-7 md:p-8 cursor-pointer w-full"
+      className="relative rounded-2xl overflow-hidden bg-neutral-900 flex flex-col justify-between p-7 md:p-8 cursor-pointer w-full"
       style={{
         border: "1px solid #2a2a28",
         height: `${CARD_HEIGHT}px`,
@@ -214,8 +214,8 @@ const Services2 = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen w-[100%] overflow-hidden py-14 pb-40 px-6 md:px-10 font-nb flex flex-col justify-center"
-      style={{ background: "#000" }}
+      className="min-h-screen w-[100%] bg-zinc-950 overflow-hidden py-14 border pb-40 px-6 md:px-10 font-nb flex flex-col justify-center"
+      // style={{ background: "#000" }}
     >
       {/* Header */}
       <div ref={headerRef} className="flex justify-between items-end pb-8 mb-14" style={{ position: "relative" }}>
