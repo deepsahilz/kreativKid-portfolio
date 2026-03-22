@@ -9,8 +9,9 @@ const services = [
     num: '01',
     title: 'Concept Art & Photo Editing',
     desc: 'Photo manipulation, surreal compositing & original concept artwork. My most personal work — where imagination has no ceiling.',
-    accent: '#c8b8a2',
+    accent: '#22d3ee',
     label: 'Fan favourite ★',
+    gradient: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)',
     from: { x: -220, y: 60, rotation: -8, opacity: 0 },
     mobileFrom: { x: -300, y: 0, rotation: -8, opacity: 0 },
   },
@@ -18,8 +19,9 @@ const services = [
     num: '02',
     title: 'Thumbnail \nDesigns',
     desc: 'Interfaces that feel before they function. Clean layouts — from wireframes to polished high-fidelity Figma files.',
-    accent: '#a2b8c8',
+    accent: '#f472b6',
     label: 'Web & mobile',
+    gradient: 'linear-gradient(135deg, #db2777 0%, #be185d 100%)',
     from: { x: 0, y: 260, rotation: 5, opacity: 0 },
     mobileFrom: { x: 0, y: 300, rotation: 5, opacity: 0 },
   },
@@ -27,8 +29,9 @@ const services = [
     num: '03',
     title: 'Poster\nDesigns',
     desc: 'Typography-led poster work with strong visual hierarchy. Each piece built around one bold, undeniable idea.',
-    accent: '#b8c8a2',
+    accent: '#fb923c',
     label: 'Print & digital',
+    gradient: 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)',
     from: { x: 0, y: -260, rotation: -5, opacity: 0 },
     mobileFrom: { x: 0, y: -300, rotation: -5, opacity: 0 },
   },
@@ -36,12 +39,13 @@ const services = [
     num: '04',
     title: 'Social media \n content design',
     desc: 'Precise photo edits — retouching, colour grading, enhancement. Subtle work that makes images feel exactly right.',
-    accent: '#c8a2b8',
+    accent: '#facc15',
     label: 'Photos & portraits',
+    gradient: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
     from: { x: 220, y: 60, rotation: 8, opacity: 0 },
     mobileFrom: { x: 300, y: 0, rotation: 8, opacity: 0 },
   },
-]
+] 
 
 const CARD_HEIGHT = 360
 
@@ -73,18 +77,19 @@ const ServiceCard = ({ s }) => {
 
   return (
     <div
-      ref={innerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className="relative rounded-2xl overflow-hidden bg-neutral-900 flex flex-col justify-between p-7 md:p-8 cursor-pointer w-full"
-      style={{
-        border: "1px solid #2a2a28",
-        height: `${CARD_HEIGHT}px`,
-        transformStyle: "preserve-3d",
-        willChange: "transform",
-      }}
-    >
+  ref={innerRef}
+  onMouseMove={handleMouseMove}
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+  className="relative rounded-2xl overflow-hidden flex flex-col justify-between p-7 md:p-8 cursor-pointer w-full"
+  style={{
+    background: s.gradient,
+    border: `1px solid ${s.accent}33`,
+    height: `${CARD_HEIGHT}px`,
+    transformStyle: "preserve-3d",
+    willChange: "transform",
+  }}
+>
       <div ref={glowRef} className="absolute pointer-events-none" style={{
         width: "280px", height: "280px", borderRadius: "50%",
         background: `radial-gradient(circle, ${s.accent}22 0%, transparent 70%)`,
@@ -92,8 +97,8 @@ const ServiceCard = ({ s }) => {
       }} />
 
       <div className="flex items-start justify-between z-10">
-        <span className="font-mono text-[10px] text-zinc-600">{s.num} ——</span>
-        <span className="font-mono text-[9px] uppercase" style={{ color: s.accent, opacity: 0.7 }}>
+        <span className="font-mono text-[10px] text-zinc-200">{s.num} ——</span>
+        <span className="font-mono text-[9px] text-zinc-300 uppercase">
           {s.label}
         </span>
       </div>
@@ -103,7 +108,7 @@ const ServiceCard = ({ s }) => {
           style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)", whiteSpace: "pre-line" }}>
           {s.title}
         </h2>
-        <p className="font-neue text-[15px] leading-[1.8] text-zinc-500">{s.desc}</p>
+        <p className="font-neue text-[15px] leading-[1.8] text-zinc-200">{s.desc}</p>
       </div>
     </div>
   )
